@@ -63,9 +63,19 @@ vars <- c(
   tax_sales_general_city = "City General Sales Tax Revenue",
   tax_income_city = "City Income Tax Revenue",
   tax_license_bus_city = "City Business and Occupation License Tax Revenue",
-  tax_sales_other_city = "City Selective Sales Tax Revenue",
-  charges = "City Revenue from Charge Fees",
-  ZHVI = "City ZHVI"
+  tax_sales_other_city = "City Selective Sales Tax Revenue (Other)",
+  charges_city = "City Revenue from Charge Fees",
+  chg_other_city = "City Revenue from Charge Fees (Other)",
+  ZHVI = "City ZHVI",
+  rev_general = "FiSC Revenue (All Sources)",
+  taxes = "FiSC Tax Revenue (All Tax Sources)",
+  tax_property = "FiSC Property Tax Revenue",
+  tax_sales_general = "FiSC General Sales Tax Revenue",
+  tax_income = "FiSC Income Tax Revenue",
+  tax_license_bus = "FiSC Business and Occupation License Tax Revenue",
+  tax_sales_other = "FiSC Selective Sales Tax Revenue (Other)",
+  charges = "FiSC Revenue from Charge Fees",
+  chg_other = "FiSC Revenue from Charge Fees (Other)"
 )
 
 for (col in names(vars)) {
