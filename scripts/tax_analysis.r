@@ -57,25 +57,25 @@ df <- read_parquet(INPUT_FILEPATH)
 #df <- filter(df, abs(years_from_enforcement)<=12)  # +/- 12 years from enforcement
 
 vars <- c(
-  rev_general_city = "City Revenue (All Sources)",
-  taxes_city = "City Tax Revenue (All Tax Sources)",
-  tax_property_city = "City Property Tax Revenue",
-  tax_sales_general_city = "City General Sales Tax Revenue",
-  tax_income_city = "City Income Tax Revenue",
-  tax_license_bus_city = "City Business and Occupation License Tax Revenue",
-  tax_sales_other_city = "City Selective Sales Tax Revenue (Other)",
-  charges_city = "City Revenue from Charge Fees",
-  chg_other_city = "City Revenue from Charge Fees (Other)",
-  ZHVI = "City ZHVI",
   rev_general = "FiSC Revenue (All Sources)",
+  rev_general_city = "City Revenue (All Sources)",
   taxes = "FiSC Tax Revenue (All Tax Sources)",
+  taxes_city = "City Tax Revenue (All Tax Sources)",
   tax_property = "FiSC Property Tax Revenue",
+  tax_property_city = "City Property Tax Revenue",
   tax_sales_general = "FiSC General Sales Tax Revenue",
+  tax_sales_general_city = "City General Sales Tax Revenue",
   tax_income = "FiSC Income Tax Revenue",
+  tax_income_city = "City Income Tax Revenue",
   tax_license_bus = "FiSC Business and Occupation License Tax Revenue",
+  tax_license_bus_city = "City Business and Occupation License Tax Revenue",
   tax_sales_other = "FiSC Selective Sales Tax Revenue (Other)",
+  tax_sales_other_city = "City Selective Sales Tax Revenue (Other)",
   charges = "FiSC Revenue from Charge Fees",
-  chg_other = "FiSC Revenue from Charge Fees (Other)"
+  charges_city = "City Revenue from Charge Fees",
+  chg_other = "FiSC Revenue from Charge Fees (Other)",
+  chg_other_city = "City Revenue from Charge Fees (Other)",
+  ZHVI = "City ZHVI"
 )
 
 for (col in names(vars)) {
