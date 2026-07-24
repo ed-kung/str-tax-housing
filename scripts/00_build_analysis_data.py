@@ -6,6 +6,9 @@ import pandas as pd
 import numpy as np
 import dotenv
 
+import warnings
+warnings.filterwarnings("ignore", category=pd.errors.PerformanceWarning)
+
 dotenv.load_dotenv(dotenv.find_dotenv())
 
 ROOT_PATH = os.getenv("ROOT_PATH")
@@ -57,8 +60,8 @@ df = df.merge(
 )
 
 df = df.merge(
-    zhvi_long.rename(columns={'RegionName': 'zhvi_city'})[['zhvi_city', 'year', 'ZHVI']],
-    on=['zhvi_city', 'year'],
+    zhvi_long,
+    on=['RegionID', 'year'],
     how='inner'
 )
 
@@ -76,6 +79,19 @@ df['passage_year'] = df['best_passage'].dt.year
 df['years_from_enforcement'] = (df['year'] - df['enforcement_year'])
 df['years_from_passage'] = (df['year'] - df['passage_year'])
 
+
+# %%
+# for cities with an enforcement date, drop rows >12 years to/from enforcement
+
+mask = (np.abs(df['years_from_enforcement']) > 12) & (df['years_from_enforcement'].notna())
+df = df.loc[~mask].reset_index(drop=True)
+
+# for cities without an enforcement date, drop years outside the min/max of the remaining data
+
+year_min = df.loc[df['best_enforcement'].notna(), 'year'].min()
+year_max = df.loc[df['best_enforcement'].notna(), 'year'].max()
+mask = (df['year'] < year_min) | (df['year'] > year_max)
+df = df.loc[~mask].reset_index(drop=True)
 
 # %%
 # change enforcement and passage year to 0 for cities without enforcement/passage dates
