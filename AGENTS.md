@@ -26,9 +26,9 @@ Never overwrite, modify, or delete anything under `RAW_DATA_PATH` or `MY_DATA_PA
 
 ## Important data files
 
-- `RAW_DATA_PATH/sales-analysis-redfin/data/best_treatment_dates_2026-0y.csv`: Passage and enforcement dates for 50 cities.
-- `RAW_DATA_PATH/lincoln-institute/FiSC-Full-Dataset-2023-Update.xlsx`: Lincoln Institute Fiscally Standardized Cities data. Data is on sheet "Data".
-- `RAW_DATA_PATH/zhvi/City_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv`: City-level Zillow Home Value Index historical. 
+- `RAW_DATA_PATH/sales-analysis-redfin/data/best_treatment_dates_2026-07.csv`: Passage and enforcement dates for 50 cities. Colloquially referred to as "policy data".
+- `RAW_DATA_PATH/lincoln-institute/FiSC-Full-Dataset-2023-Update.xlsx`: Lincoln Institute Fiscally Standardized Cities data. Data is on sheet "Data". Colloquially referred to as "tax data".
+- `RAW_DATA_PATH/zhvi/City_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv`: City-level Zillow Home Value Index historical. Colloquially referred to as "zhvi data".
 
 ## Repo layout
 
