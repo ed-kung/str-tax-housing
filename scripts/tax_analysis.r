@@ -34,6 +34,7 @@ csdid <- function(yname, gname) {
   return(o)
 }
 
+
 # Creates event study plot
 es_graph <- function(att_gt_object, title, bw, bal=NULL) {
   es <- aggte(att_gt_object, type="dynamic", min_e=-bw, max_e=bw, balance_e=bal, na.rm=TRUE, bstrap=FALSE)
@@ -54,6 +55,7 @@ INPUT_FILEPATH <- paste0(MY_DATA_PATH, "/tax_analysis_panel.parquet")
 
 df <- read_parquet(INPUT_FILEPATH)
 
+#df <- filter(df, year<2020)  # remove covid years
 #df <- filter(df, abs(years_from_enforcement)<=12)  # +/- 12 years from enforcement
 
 vars <- c(
@@ -61,16 +63,16 @@ vars <- c(
   rev_general_city = "City Revenue (All Sources)",
   taxes = "FiSC Tax Revenue (All Tax Sources)",
   taxes_city = "City Tax Revenue (All Tax Sources)",
-  tax_property = "FiSC Property Tax Revenue",
-  tax_property_city = "City Property Tax Revenue",
-  tax_sales_general = "FiSC General Sales Tax Revenue",
-  tax_sales_general_city = "City General Sales Tax Revenue",
-  tax_income = "FiSC Income Tax Revenue",
-  tax_income_city = "City Income Tax Revenue",
-  tax_license_bus = "FiSC Business and Occupation License Tax Revenue",
-  tax_license_bus_city = "City Business and Occupation License Tax Revenue",
-  tax_sales_other = "FiSC Selective Sales Tax Revenue (Other)",
-  tax_sales_other_city = "City Selective Sales Tax Revenue (Other)",
+  tax_property = "FiSC Property Tax",
+  tax_property_city = "City Property Tax",
+  tax_sales_general = "FiSC General Sales Tax",
+  tax_sales_general_city = "City General Sales Tax",
+  tax_income = "FiSC Income Tax",
+  tax_income_city = "City Income Tax",
+  tax_license_bus = "FiSC Business and Occupation License Tax",
+  tax_license_bus_city = "City Business and Occupation License Tax",
+  tax_sales_other = "FiSC Selective Sales Tax (Other)",
+  tax_sales_other_city = "City Selective Sales Tax (Other)",
   charges = "FiSC Revenue from Charge Fees",
   charges_city = "City Revenue from Charge Fees",
   chg_other = "FiSC Revenue from Charge Fees (Other)",
@@ -78,10 +80,30 @@ vars <- c(
   ZHVI = "City ZHVI"
 )
 
-for (col in names(vars)) {
-  label <- vars[[col]]
-  df$outcome <- log1p(df[[col]])
+results <- data.frame(
+  outcome = unname(unlist(vars)),
+  att = NA_real_,
+  se = NA_real_,
+  p = NA_real_
+)
+
+for (i in seq_along(vars)) {
+  col <- names(vars)[i]
+  label <- vars[[i]]
+  
+  if (col %in% c("ZHVI")) {
+    df$outcome <- log1p(df[[col]])
+  } else {
+    df$outcome <- log1p(df[[col]])  # the data are per capita
+  }
+  
   o <- csdid("outcome", "enforcement_year")
+
+  r <- aggte(o, type="simple", na.rm=TRUE)
+  results$att[i] <- r$overall.att
+  results$se[i] <- r$overall.se
+  results$p[i] <- 2*pnorm(-abs(r$overall.att / r$overall.se))
+  
   g <- es_graph(o, label, 6)
   print(g)
   filename <- paste0(ROOT_PATH, "/results/csdid_", col, ".png")
@@ -89,3 +111,4 @@ for (col in names(vars)) {
   ggsave(filename, plot = g, width=6, height=4)
 }
 
+print(results)
