@@ -28,9 +28,9 @@ csdid <- function(dataframe, yname, gname) {
     yname = yname,
     gname = gname,
     tname = "year",
-    idname = "city_id",
+    idname = "id",
     data = dataframe,
-    allow_unbalanced_panel = TRUE,
+    allow_unbalanced_panel = FALSE,
     control_group = "notyettreated"
   )
   return(o)
@@ -55,49 +55,32 @@ es_graph <- function(att_gt_object, title, bw, bal=NULL) {
 
 df <- read_parquet(INPUT_FILEPATH)
 
-df$A0389 <- df$A03 + df$A89
-
 #df <- filter(df, year<2020)  # remove covid years
 #df <- filter(df, year>=2019)  # use Davide time period
 
 
 vars <- c(
   rev_general = "FiSC Revenue (All Sources)",
-  #rev_general_city = "City Revenue (All Sources)",
+  rev_general_city = "City Revenue (All Sources)",
   taxes = "FiSC Tax Revenue (All Tax Sources)",
-  #taxes_city = "City Tax Revenue (All Tax Sources)",
+  taxes_city = "City Tax Revenue (All Tax Sources)",
   tax_property = "FiSC Property Tax Revenue",
-  #tax_property_city = "City Property Tax",
+  tax_property_city = "City Property Tax Revenue",
   tax_sales_general = "FiSC General Sales Tax Revenue",
-  #tax_sales_general_city = "City General Sales Tax",
+  tax_sales_general_city = "City General Sales Tax Revenue",
   tax_income = "FiSC Income Tax Revenue",
-  #tax_income_city = "City Income Tax",
-  #tax_other = "FiSC Tax Revenue (Other)",
-  #tax_other_city = "City Other Tax",
+  tax_income_city = "City Income Tax Revenue",
   tax_sales_selectiv = "FiSC Selective Sales Tax Revenue",
+  tax_sales_selectiv_city = "City Selective Sales Tax Revenue",
   tax_licenses = "FiSC License Tax Revenue",
+  tax_licenses_city = "City License Tax Revenue",
   tax_transfer = "FiSC Transfer Tax Revenue",
-  #tax_misc = "FiSC Miscellaneous Tax Revenue",
-  #tax_license_bus = "FiSC Business and Occupation License Tax",
-  #tax_license_bus_city = "City Business and Occupation License Tax",
-  #tax_license_other = "FiSC Other License Tax",
-  #tax_license_other_city = "City Other License Tax",
-  #tax_sales_other = "FiSC Selective Sales Tax (Other)",
-  #tax_sales_other_city = "City Selective Sales Tax (Other)",
-  #tax_transfer = "FiSC Transfer Taxes",
-  #tax_transfer_city = "City Transfer Taxes",
-  #misc_fines_fees = "FiSC Fines and Forfeits",
-  #misc_fines_fees_city = "City Fines and Forefeits",
+  tax_transfer_city = "City Transfer Tax Revenue",
   charges = "FiSC Charge Revenue",
-  #charges_city = "City Revenue from Charge Fees",
-  #chg_other = "FiSC Revenue from Charge Fees (Other)",
-  #chg_other_city = "City Revenue from Charge Fees (Other)",
+  charges_city = "City Charge Revenue",
   rev_utility = "FiSC Utility Revenue",
+  rev_utility_city = "City Utility Revenue",
   ZHVI = "City ZHVI"
-  #T29 = "City T29",
-  #A89 = "City A89"
-  #A0389 = "City A03 + A89",
-  #U30 = "City U30"
 )
 
 
@@ -131,9 +114,9 @@ for (covid in c(TRUE, FALSE)) {
     }
     
     if (covid) {
-      o <- csdid(df, "outcome", "enforcement_year")
+      o <- csdid(df, "outcome", "effective_year")
     } else {
-      o <- csdid(filter(df, year<2020), "outcome", "enforcement_year")
+      o <- csdid(filter(df, year<2020), "outcome", "effective_year")
     }
 
     r <- aggte(o, type="simple", na.rm=TRUE)
@@ -151,4 +134,6 @@ for (covid in c(TRUE, FALSE)) {
   results <- rbind(results, my_results)
 }
 
-print(results)
+results %>% 
+  filter(p < 0.1) %>%
+  print()
