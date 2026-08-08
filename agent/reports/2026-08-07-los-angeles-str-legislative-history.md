@@ -1,55 +1,85 @@
 # Los Angeles, CA short-term-rental legislative history
 
-Los Angeles was the first entry in `AGENT_DATA_PATH/str_regulations.json` without `agent_checked: true`. I researched the city's short-term-rental (STR) legislative history from 2008 forward, wrote seven binding legislative actions into a `legislative_history` list, added `airbnb_tax_collection_date` (2016-08-01) and `airbnb_data_sharing_date` (2020-08-31), and marked the record checked. The single dominant action is the Home-Sharing Ordinance (Ordinance No. 185,931), adopted 2018-12-11, effective 2019-07-01, enforced from 2019-11-01, which restricts STRs to a host's registered primary residence with a 120-night annual cap. Nothing binding happened at the city level between 2008 and early 2018: STRs of 30 days or less were already prohibited by the zoning code in most residential zones (confirmed by *Chen v. Kraft* (2016)), and the city simply did not enforce it. Notably, Airbnb's voluntary tax agreement (2016) predates any STR ordinance by more than two years.
+Los Angeles was the first record in `AGENT_DATA_PATH/str_regulations.json` without an `agent_checked`
+value. I researched the city's short-term-rental legislative history back to 2008 and filled in the
+record. The finding in one line: Los Angeles had no binding STR-specific legislation at all until 2018,
+then adopted its primary framework — the Home-Sharing Ordinance (Ordinance No. 185931) — on December 11,
+2018, effective July 1, 2019 and enforced from November 1, 2019. Airbnb began collecting the city's own
+14 percent Transient Occupancy Tax on August 1, 2016 under a voluntary agreement, more than two years
+before the city had any regulatory framework, and established a direct compliance data connection with
+the city on November 6, 2019 when the Council approved its Platform Agreement, automated via the city's
+API on August 31, 2020.
 
-## Entries written to `legislative_history`
+## What was recorded
 
-| Effective | Title | Jurisdiction |
-| --- | --- | --- |
-| 2018-04-15 | Ordinance No. 185,451, "Party House" / Loud or Unruly Gatherings (LAMC 41.58.1) | City |
-| 2019-07-01 | Ordinance No. 185,931, Home-Sharing Ordinance (LAMC 12.22 A.32) | City |
-| 2019-11-01 | Council resolution adopting Appendix A of the Home-Sharing Administrative Guidelines and the Master Platform Agreement | City |
-| 2020-12-01 | Ordinance No. 186,197 (Short-Term Rental Enforcement Trust Fund) plus the 2020-11-10 per-night fee resolution | City |
-| 2021-09-24 | SB 60 (Ch. 307, Stats. 2021), enhanced fines for STR ordinance infractions | State |
-| 2024-07-01 | AB 537 (Ch. 805, Stats. 2023), all-in price disclosure for short-term lodging | State |
-| 2026-02-23 | Ordinance No. 188,796, comprehensive planning fee update (Home-Sharing fees) | City |
+Four binding laws, in order:
 
-## Main findings
+1. **Ordinance No. 185451, the "Party House Ordinance"** (City of Los Angeles), passed 2018-02-21,
+   effective and enforced 2018-04-15. Added LAMC Section 41.58.1 making loud or unruly gatherings at a
+   residence a public nuisance with escalating administrative fines, reaching the person who rents the
+   residence out. Written largely in response to STR party houses and later cross-referenced by the
+   Home-Sharing Ordinance's suspension rules and guest Code of Conduct.
+2. **Ordinance No. 185931, the "Home-Sharing Ordinance"** (City of Los Angeles), passed 2018-12-11,
+   effective 2019-07-01, enforced 2019-11-01. The city's primary framework (`primary_framework: true`).
+   Legalizes short-term rentals as an accessory use in residential zones but only in a registered primary
+   residence, caps them at 120 nights a year absent an Extended Home-Sharing registration, excludes rent
+   stabilized and covenanted affordable units, and imposes host record-keeping, safety, occupancy and
+   noise rules plus platform booking-verification and monthly data-reporting duties.
+3. **Ordinance No. 186197, Short-Term Rental Enforcement Trust Fund** (City of Los Angeles), passed
+   2019-06-18, effective 2019-07-28. Companion fiscal ordinance directing ten percent of STR-attributable
+   TOT and the home-sharing per-night fee into a dedicated enforcement fund, and authorizing the per-night
+   fee later set by Council resolution at $3.10 effective 2020-12-01.
+4. **SB 60 (Glazer), Chapter 307, Statutes of 2021** (California), passed and effective 2021-09-24 as an
+   urgency statute. Raises the maximum administrative fines cities may impose for health-or-safety STR
+   ordinance infractions to $1,500/$3,000/$5,000. `enforcement_date` is null: as of the City Attorney's
+   November 26, 2024 report, Los Angeles was still charging $500 per violation and had not adopted the
+   higher maximums.
 
-- **The Home-Sharing Ordinance is the only substantive land-use regime.** Council adoption 2018-12-11, mayoral approval 2018-12-17, publication 2018-12-21, effective 2019-07-01, enforcement start 2019-11-01. Primary residence only (six months of the year), 120 nights per calendar year unless the host obtains Extended Home-Sharing approval, one registration and one booked listing per host, registration number required on every advertisement, prior TOT registration certificate required, and categorical exclusion of RSO units, covenanted affordable units, Ellis Act withdrawals within five years, converted RSO single-family homes within five years, and post-2017 ADUs that are not the host's primary residence. City listings fell about 74% between 2019 and 2023 (36,600 to 9,500).
-- **No host-presence requirement.** Unlike New York, Los Angeles allows whole-home rental of a registered primary residence while the host is away, so `host_presence_requirements` is coded "no change" throughout, and `rental_type_restrictions` is coded "no change" for the Home-Sharing Ordinance because it does not distinguish private-room from whole-unit rentals. The binding constraint is the primary-residence rule, coded separately.
-- **Platform obligations were built in two layers.** The ordinance itself bars platforms from completing bookings for unregistered, over-cap or multiple listings; the Council's 2019-10-30 resolution then adopted Appendix A of the Administrative Guidelines and the Master Platform Agreement template, which set out the API method, the manual weekly spreadsheet method, and the Platform Agreement route. I treated this as binding law rather than a mere resolution because LAMC 12.22 A.32(i) provides that "No one shall fail to comply with the Administrative Guidelines."
-- **`airbnb_tax_collection_date` = 2016-08-01.** Announced 2016-07-18 as an initially three-year voluntary agreement; Airbnb collects and remits the city's 14% Transient Occupancy Tax on its own bookings only. Airbnb reported remitting over $275 million between August 2016 and June 2023. A TOT collection agreement with the Office of Finance later became a precondition for signing a Home-Sharing Platform Agreement.
-- **`airbnb_data_sharing_date` = 2020-08-31.** This is the date Airbnb went live on the city's compliance API after a two-week test, per City Planning's 2021 and 2023 reports to Council. Two earlier dates are defensible and were rejected: the Council approved the individual Airbnb Platform Agreement on 2019-11-06 (final 2019-11-08), and Airbnb removed thousands of city-identified categorically ineligible listings between late 2019 and early 2020 — but that was data flowing from the city to Airbnb, not the reverse. Sustained Airbnb-to-city listing data for compliance began with the API. Its launch cut listings a further ~14% immediately.
-- **Airbnb is the only platform with a Platform Agreement**, and it also collects and remits the per-night enforcement fee ($3.10 from 2020-12-01, $3.30 as of 2025-09-01) for its hosts. City Planning estimated self-reporting compliance by hosts on non-agreement platforms at only ~35%.
+`airbnb_tax_collection_date`: **2016-08-01**. Confirmed by the LA Office of Finance TOT page and Airbnb's
+own newsroom post; the 14 percent TOT is a city tax under LAMC Article 1.7, so it qualifies as
+municipal-level collection.
 
-## Excluded items and why
-
-- **Short-Term Rental Technical Amendment Ordinance** (CF 14-1635-S13), which would amend LAMC 12.03 to declare that STR of dwelling units was never a permitted use, rebutting *People v. Venice Suites, LLC* (2021). Approved by the City Planning Commission 2025-09-25 and by PLUM 2026-03-24, but not yet adopted by the full Council, so not binding.
-- **Council action of 2025-03-18** (CF 14-1635-S10) directing amendments to the Home-Sharing Ordinance, including a private right of action and mandatory platform booking verification. This is a directive to departments, not enacted law; draft amendments were still in committee as of mid-2026. A prior version of the agent script included this entry with a caveat; I dropped it to comply with the "binding legislative actions only" rule.
-- **Vacation Rental Ordinance** allowing non-primary-residence rentals, possibly tied to the 2026 World Cup and 2028 Olympics (CF 25-0029-S1 / 18-1246). Held by PLUM 2026-05-12; never adopted.
-- **Los Angeles County's STR ordinance**, which applies only to unincorporated areas and not inside the city.
-- **Pre-2018 city actions.** The June 2015 Council motion directing City Planning to draft an ordinance, the 2016 City Planning Commission recommendation (CPC-2016-1243), and the various CAO sharing-economy studies are all non-binding steps toward Ordinance No. 185,931.
+`airbnb_data_sharing_date`: **2019-11-06**. Airbnb signed its Platform Agreement 2019-10-31 (CF
+14-1635-S9) and the Council approved it 2019-11-06, after which the city began sending Airbnb lists of
+categorically ineligible listings to take down. The daily-query API launched 2020-08-31.
 
 ## Judgment calls
 
-- **Ordinance No. 185,451 (Party House)** contains no STR-specific text — I verified the full ordinance. I included it because it arose from Council File 12-1824 on commercial party houses operated largely as STRs and was the city's only relevant enforcement tool in the year before the Home-Sharing Ordinance, but I coded every measure "no change" except `host_compliance_requirements` and said plainly in the summary that it is a general nuisance ordinance. A prior draft of this work asserted that the ordinance bars home-sharing while a violation notice is posted; that claim is not in the ordinance text and I could not verify it elsewhere, so it is not repeated.
-- **Ordinance No. 188,796** is a general planning fee ordinance, not an STR measure, but it raised regular Home-Sharing registration from $89 to $441 and Extended Home-Sharing discretionary review from $5,660 to $12,798, so it is coded as an increase in registration requirements.
-- **AB 537** is a consumer price-disclosure statute rather than a housing or land-use rule. It is included because it expressly covers STRs booked through platforms and is enforceable by the Los Angeles City Attorney.
-- Coding is relative to the pre-existing legal baseline. Because the zoning code already prohibited STRs, the Home-Sharing Ordinance is technically a legalization, but every measure it introduced is an enforceable constraint where none previously operated, so it is coded as increasing restrictions.
+- **Excluded non-binding actions.** The Master Platform Agreement resolution (2019-10-30), the Airbnb
+  Platform Agreement itself (2019-11-06), the Administrative Guidelines (2019-06-28) and the per-night fee
+  resolution (2020-11-10) are all implementing instruments rather than legislation, so they appear in
+  summaries and explanations rather than as `legislative_history` entries.
+- **Excluded the Vacation Rental Ordinance.** The proposed ordinance to allow STRs in non-primary
+  residences (CF 18-1246) has been pending since 2020, was reinstated in June 2025 and is still in
+  committee as of mid-2026 alongside an Olympics-related temporary program (CF 25-0029-S1). Never adopted.
+- **Excluded California AB 537** (2023, short-term lodging price advertising). It is a general consumer
+  price-disclosure law applying to all lodging including hotels, not an STR regulation.
+- **Nothing between 2008 and 2018.** The pre-existing prohibition on transient use in residential zones
+  predates 2008 and no STR-specific ordinance was adopted in that window; the city's own planning reports
+  and LA Times reporting describe the pre-2018 rules as effectively unenforceable.
+- **Coastal zone.** Coastal Act Protectors v. City of Los Angeles (2022) 75 Cal.App.5th 526 challenged
+  application of the Home-Sharing Ordinance in the Venice coastal zone without a coastal development
+  permit. Both the trial court and the Court of Appeal rejected it, so enforcement was never suspended and
+  the enforcement date is unchanged.
 
 ## Artifacts
 
-- Script: `agent/scripts/03_str_regulations_los_angeles_ca.py` (rewritten from an earlier version that used a `platform_enforcement` list; it now writes the current `airbnb_tax_collection_date` / `airbnb_data_sharing_date` schema)
-- Data: `AGENT_DATA_PATH/str_regulations.json`, Los Angeles record updated with `legislative_history` (7 entries), `airbnb_tax_collection_date`, `airbnb_data_sharing_date`, `agent_checked: true`
+- Script: `agent/scripts/03_str_regulations_los_angeles.py`
+- Updated data: `AGENT_DATA_PATH/str_regulations.json` (record index 1, Los Angeles CA, `agent_checked: 1`)
+- Pre-edit backup: `/tmp/str_regulations.backup.json` (only index 1 differs)
 
-## Primary sources consulted
+## Primary sources
 
-- LA City Clerk council files 14-1635-S2, S7, S9, S10, S11, S13; 12-1824-S1; 09-0969-S4
-- Ordinance No. 185,451 full text (cityclerk.lacity.org)
-- Home-Sharing Ordinance FAQ and Administrative Guidelines (planning.lacity.gov); LAHD Home Sharing Ordinance page
-- City Planning reports to Council dated 2019-10-18, 2021-09-08 and 2023-10-04 (API launch, platform agreement, listing counts)
-- City of Los Angeles / Airbnb Home-Sharing Platform Agreement (CF 14-1635-S9, 2019-10-31)
-- LA Office of Finance TOT requirements page; Airbnb newsroom ($275M remitted, Aug 2016–Jun 2023); LA Times / NBC LA / Fortune coverage of the July 2016 agreement
-- California Legislative Information for SB 60 (2021) and AB 537 (2023)
-- *Coastal Act Protectors v. City of Los Angeles* (2022) and *Chen v. Kraft* (2016) for the pre-ordinance legal baseline
+- Council files 14-1635-S2 (Home-Sharing Ordinance), 14-1635-S7 (Trust Fund, per-night fee),
+  14-1635-S9 (Airbnb Platform Agreement), 14-1635-S10 (enforcement), 12-1824-S1 (Party House Ordinance),
+  18-1246 and 25-0029-S1 (proposed vacation rentals), all at cityclerk.lacity.org
+- LA City Planning Home-Sharing Administrative Guidelines (2019-06-28) and the October 4, 2023 enforcement
+  report to CF 14-1635-S10
+- LA Office of Finance, Transient Occupancy Tax Requirements
+- Airbnb newsroom, "City of Los Angeles collected more than $275 million in taxes from Airbnb"
+- Los Angeles Times, "L.A., Airbnb launch system meant to help enforce rental rules" (2020-08-31)
+- California Legislative Information, SB 60 (2021-2022)
+
+## Next unchecked city
+
+Chicago, IL.
